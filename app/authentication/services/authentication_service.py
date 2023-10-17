@@ -1,6 +1,7 @@
+import jwt
 from typing import TYPE_CHECKING
-
 from fastapi import HTTPException
+from app.commons.settings import settings
 
 from app.commons.schemas import UserCredentials
 
@@ -16,9 +17,16 @@ class AuthenticationService:
 
     async def get_auth_token(self, credentials: UserCredentials):
         try:
-            return await self.authentication_repository.get_user_by_credentials(
+            user = await self.authentication_repository.get_user_by_credentials(
                 credentials
             )
+            token = jwt.encode(
+                {"role_id": user["role_id"], "email": user["email"]},
+                settings.secret_key,
+                settings.algorithm,
+            )
+
+            return {"token": token, "role_id": user["role_id"], "email": user["email"]}
         except HTTPException as e:
             print("Http exception: ", e.detail)
             raise e
