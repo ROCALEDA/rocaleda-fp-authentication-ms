@@ -18,4 +18,8 @@ def initialize(authentication_service: "AuthenticationService"):
     async def get_auth_token(credentials: UserCredentials):
         return await authentication_service.get_auth_token(credentials)
 
-    return {"get_auth_token": get_auth_token}
+    @router.get("/validate/{token}")
+    async def validate_jwt(token: str):
+        return await authentication_service.validate_jwt(token)
+
+    return {"get_auth_token": get_auth_token, "validate_jwt": validate_jwt}

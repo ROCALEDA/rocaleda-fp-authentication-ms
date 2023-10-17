@@ -33,3 +33,12 @@ class AuthenticationService:
         except Exception as e:
             print("Internal error: ", e)
             raise e
+
+    async def validate_jwt(self, token: str):
+        try:
+            decoded_payload = jwt.decode(
+                token, settings.secret_key, algorithms=[settings.algorithm]
+            )
+            return {"valid": True, "data": decoded_payload}
+        except jwt.InvalidTokenError:
+            raise HTTPException(400, "Invalid token")
