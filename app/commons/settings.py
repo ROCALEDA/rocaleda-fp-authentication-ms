@@ -7,4 +7,5 @@ class Settings(BaseSettings):
     algorithm: str
 
 
-settings = Settings()
+def get_settings():
+    return Settings()

@@ -1,7 +1,7 @@
 import jwt
 from typing import TYPE_CHECKING
 from fastapi import HTTPException
-from app.commons.settings import settings
+from app.commons.settings import get_settings
 
 from app.commons.schemas import UserCredentials
 
@@ -22,8 +22,8 @@ class AuthenticationService:
             )
             token = jwt.encode(
                 {"role_id": user["role_id"], "email": user["email"]},
-                settings.secret_key,
-                settings.algorithm,
+                get_settings().secret_key,
+                get_settings().algorithm,
             )
 
             return {"token": token, "role_id": user["role_id"], "email": user["email"]}
@@ -37,7 +37,7 @@ class AuthenticationService:
     async def validate_jwt(self, token: str):
         try:
             decoded_payload = jwt.decode(
-                token, settings.secret_key, algorithms=[settings.algorithm]
+                token, get_settings().secret_key, algorithms=[get_settings().algorithm]
             )
             return {"valid": True, "data": decoded_payload}
         except jwt.InvalidTokenError:
