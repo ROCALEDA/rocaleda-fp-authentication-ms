@@ -24,5 +24,4 @@ class AuthenticationRepository:
             return response.json()
 
     def __build_request_uri(self, host: str, endpoint: str) -> str:
-        # TODO: Change to https
-        return f"http://{host}/{endpoint}"
+        return f"https://{host}/{endpoint}"
