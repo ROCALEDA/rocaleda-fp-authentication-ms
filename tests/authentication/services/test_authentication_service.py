@@ -16,6 +16,7 @@ class TestAuthenticationService:
         mock_repository.get_user_by_credentials.return_value = {
             "role_id": 1,
             "email": "user@example.com",
+            "id": 1,
         }
 
         from app.authentication.services.authentication_service import (

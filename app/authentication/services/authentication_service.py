@@ -20,13 +20,23 @@ class AuthenticationService:
             user = await self.authentication_repository.get_user_by_credentials(
                 credentials
             )
+
             token = jwt.encode(
-                {"role_id": user["role_id"], "email": user["email"]},
+                {
+                    "role_id": user["role_id"],
+                    "email": user["email"],
+                    "user_id": user["id"],
+                },
                 get_settings().secret_key,
                 get_settings().algorithm,
             )
 
-            return {"token": token, "role_id": user["role_id"], "email": user["email"]}
+            return {
+                "token": token,
+                "role_id": user["role_id"],
+                "email": user["email"],
+                "user_id": user["id"],
+            }
         except HTTPException as e:
             print("Http exception: ", e.detail)
             raise e
